@@ -1,4 +1,4 @@
-package com.kmak.booking;
+package com.kmak.roombooking;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

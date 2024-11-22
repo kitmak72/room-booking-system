@@ -1,4 +1,4 @@
-package com.kmak.booking;
+package com.kmak.roombooking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
