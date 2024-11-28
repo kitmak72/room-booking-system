@@ -37,7 +37,7 @@ public class BookingServiceTest {
     private BookingService bookingService;
 
     private AutoCloseable close;
-    private final Clock fixedClock = Clock.fixed(LocalDateTime.of(2024, 11, 25, 9, 0).toInstant(ZoneOffset.UTC), ZoneId.of("UTC"));
+    private final Clock fixedClock = Clock.fixed(LocalDateTime.of(2099, 11, 25, 9, 0).toInstant(ZoneOffset.UTC), ZoneId.of("UTC"));
 
     @BeforeEach
     public void before() {

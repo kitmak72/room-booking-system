@@ -44,7 +44,6 @@ public class BookingService {
             booking.setRoom(roomRepository.getReferenceById(roomId));
             booking.setStartTime(startTime);
             booking.setEndTime(endTime);
-            booking.setRequestTime(LocalDateTime.now());
             booking.setBookingStatus(BookingStatus.PENDING);
             return bookingRepository.save(booking);
         });
@@ -71,6 +70,7 @@ public class BookingService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        log.info("Start time: {}, End time: {}, Now: {}", startTime, endTime, now);
         if (startTime.isBefore(now) || endTime.isBefore(now)) {
             throw new InvalidBookingException("Booking times must be in the future");
         }
@@ -96,18 +96,4 @@ public class BookingService {
         return !day.equals(DayOfWeek.SATURDAY) && !day.equals(DayOfWeek.SUNDAY);
     }
 
-//    @Transactional
-//    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
-//    public void settlePendingBooking() {
-//        Pageable pageable = PageRequest.of(0, 10);
-//        List<Booking> bookings = bookingRepository.findByStatusOrderByRequestTime(BookingStatus.PENDING, pageable);
-//        bookings.forEach(booking -> {
-//            if (!bookingRepository.existsConflictingBookings(booking.getRoom().getId(), booking.getStartTime(), booking.getEndTime())) {
-//                booking.setStatus(BookingStatus.ACCEPTED);
-//            } else {
-//                booking.setStatus(BookingStatus.REJECTED);
-//            }
-//        });
-//        bookingRepository.saveAll(bookings);
-//    }
 }

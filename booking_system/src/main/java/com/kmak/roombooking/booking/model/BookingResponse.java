@@ -1,7 +1,7 @@
 package com.kmak.roombooking.booking.model;
 
-public record BookingResponse(Long bookingId, String message) {
-    public BookingResponse(Long bookingId) {
+public record BookingResponse(long bookingId, String message) {
+    public BookingResponse(long bookingId) {
         this(bookingId, "Booking submitted");
     }
 }

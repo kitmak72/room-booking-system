@@ -12,10 +12,10 @@ import java.util.concurrent.Executors;
 @Component
 public class BookingProcessor {
 
+    private final Logger logger = LoggerFactory.getLogger(BookingProcessor.class);
     private final BookingQueue bookingQueue;
     private final BookingService bookingService;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Logger logger = LoggerFactory.getLogger(BookingProcessor.class);
 
     public BookingProcessor(BookingQueue bookingQueue, BookingService bookingService) {
         this.bookingQueue = bookingQueue;
