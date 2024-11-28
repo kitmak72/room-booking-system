@@ -38,7 +38,7 @@ erDiagram
         timestamp requestedTime
         enum bookingStatus
     }
-    Room ||--o{ BOOKING : has
+    Room ||--o{ Booking : has
 ```
 
 ## Start the Application
