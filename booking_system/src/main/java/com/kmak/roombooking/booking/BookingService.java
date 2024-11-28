@@ -2,8 +2,6 @@ package com.kmak.roombooking.booking;
 
 import com.kmak.roombooking.booking.model.Booking;
 import com.kmak.roombooking.booking.model.BookingStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import java.util.Optional;
 @Service
 public class BookingService {
 
-    private static final Logger log = LoggerFactory.getLogger(BookingService.class);
     private final BookingQueue bookingQueue;
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
@@ -70,7 +67,6 @@ public class BookingService {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        log.info("Start time: {}, End time: {}, Now: {}", startTime, endTime, now);
         if (startTime.isBefore(now) || endTime.isBefore(now)) {
             throw new InvalidBookingException("Booking times must be in the future");
         }
