@@ -1,6 +1,7 @@
 package com.kmak.roombooking.booking.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -29,7 +30,8 @@ public class Booking {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "request_time", nullable = false)
+    @CreationTimestamp
+    @Column(name = "request_time", updatable = false)
     private LocalDateTime requestTime;
 
     @Enumerated(EnumType.STRING)
