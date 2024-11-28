@@ -8,7 +8,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -23,28 +26,30 @@ public class Main {
     }
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Clock fixedClock = Clock.fixed(LocalDateTime.of(2099, 11, 25, 9, 0).toInstant(ZoneOffset.UTC), ZoneId.of("UTC"));
+
 
     public static void main(String[] args) {
         List<BookingRequest> firstBatch = List.of(
-                new BookingRequest(1, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(2, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(3, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(4, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(5, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(6, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(7, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(8, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(9, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(10, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3))
+                new BookingRequest(1, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(2, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(3, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(4, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(5, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(6, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(7, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(8, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(9, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(10, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3))
         );
 
         List<BookingRequest> secondBatch = List.of(
-                new BookingRequest(2, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(3, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(5)),
-                new BookingRequest(4, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(6)),
-                new BookingRequest(5, LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(4)),
-                new BookingRequest(6, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)),
-                new BookingRequest(10, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3))
+                new BookingRequest(2, LocalDateTime.now(fixedClock).plusHours(2), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(3, LocalDateTime.now(fixedClock).plusHours(4), LocalDateTime.now(fixedClock).plusHours(5)),
+                new BookingRequest(4, LocalDateTime.now(fixedClock).plusHours(4), LocalDateTime.now(fixedClock).plusHours(6)),
+                new BookingRequest(5, LocalDateTime.now(fixedClock).plusHours(3), LocalDateTime.now(fixedClock).plusHours(4)),
+                new BookingRequest(6, LocalDateTime.now(fixedClock).plusHours(2), LocalDateTime.now(fixedClock).plusHours(3)),
+                new BookingRequest(10, LocalDateTime.now(fixedClock).plusHours(1), LocalDateTime.now(fixedClock).plusHours(3))
         );
 
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -110,10 +115,16 @@ public class Main {
                     .uri(new URI("http://localhost:8080/api/bookings/new"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(
-                            objectMapper.writeValueAsString(bookingRequest)
+                            """
+                                    {
+                                        "roomId": %d,
+                                        "startTime": "%s",
+                                        "endTime": "%s"
+                                    }
+                                    """.formatted(bookingRequest.roomId(), bookingRequest.startTime(), bookingRequest.endTime())
                     ))
                     .build();
-        } catch (URISyntaxException | JsonProcessingException e) {
+        } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
