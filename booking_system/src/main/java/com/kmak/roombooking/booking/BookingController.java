@@ -18,7 +18,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("/{bookingId}/status")
+    @GetMapping("/{bookingId}")
     public ResponseEntity<Booking> getBooking(@PathVariable Long bookingId) {
         var booking = bookingService.getBooking(bookingId);
         return booking.map(ResponseEntity::ok).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));

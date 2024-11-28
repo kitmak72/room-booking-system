@@ -44,18 +44,18 @@ public class BookingControllerTest {
 
         when(bookingService.getBooking(bookingId)).thenReturn(Optional.of(booking));
 
-        mockMvc.perform(get("/api/bookings/{bookingId}/status", bookingId))
+        mockMvc.perform(get("/api/bookings/{bookingId}", bookingId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(booking)));
     }
 
     @Test
     void testGetBooking_NotFound() throws Exception {
-        Long bookingId = 1L;
+        long bookingId = 1L;
 
         when(bookingService.getBooking(bookingId)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/bookings/{bookingId}/status", bookingId))
+        mockMvc.perform(get("/api/bookings/{bookingId}", bookingId))
                 .andExpect(status().isNotFound());
     }
 
